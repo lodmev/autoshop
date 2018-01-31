@@ -45,19 +45,18 @@ bool DataBase::restoreDataBase()
 /* Метод для открытия базы данных
  * */
 bool DataBase::openDataBase()
-{   // QLibrary sqlib("qsqlibase.dll");
-     //sqlib.load();
+{
     /* База данных открывается по заданному пути
      * и имени базы данных, если она существует
      * */
-    db = QSqlDatabase::addDatabase("QIBASE");
+    db = QSqlDatabase::addDatabase("QFIREBIRD");
     db.setHostName(DATABASE_HOSTNAME);
     db.setUserName("SYSDBA");
     db.setPassword("masterkey");
-
-    db.setDatabaseName("C:\\Program Files\\AutoDealer\\Car-care Center 7\\DataBase\\" DATABASE_NAME);
+    //db.setConnectOptions("ISC_DPB_LC_CTYPE=windows-1251");
+    db.setDatabaseName(DATABASE_NAME);
     if(db.open()){
-        qDebug() << "SUCCESS!";
+        qDebug() << "Database connect succes!";
         return true;
     } else {
           qDebug() << db.lastError();
@@ -79,7 +78,7 @@ bool DataBase::createTable()
     /* В данном случае используется формирование сырого SQL-запроса
      * с последующим его выполнением.
      * */
-    QSqlQuery query;
+  /*  QSqlQuery query;
     if(!query.exec( "CREATE TABLE " TABLE " ("
                             "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                             TABLE_DATE      " DATE            NOT NULL,"
@@ -94,7 +93,7 @@ bool DataBase::createTable()
     } else {
         return true;
     }
-    return false;
+  */  return false;
 }
 
 /* Метод для вставки записи в базу данных
@@ -109,7 +108,7 @@ bool DataBase::inserIntoTable(const QVariantList &data)
      * которые потом связываются методом bindValue
      * для подстановки данных из QVariantList
      * */
-    query.prepare("INSERT INTO " TABLE " ( " TABLE_DATE ", "
+  /*  query.prepare("INSERT INTO " TABLE " ( " TABLE_DATE ", "
                                              TABLE_TIME ", "
                                              TABLE_RANDOM ", "
                                              TABLE_MESSAGE " ) "
@@ -126,5 +125,5 @@ bool DataBase::inserIntoTable(const QVariantList &data)
     } else {
         return true;
     }
-    return false;
+    */ return false;
 }

@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    this->setWindowTitle("Поиск по базе");
     /* Первым делом необходимо создать объект, который будет использоваться для работы с данными нашей БД
      * и инициализировать подключение к базе данных
      * */
@@ -29,18 +29,15 @@ MainWindow::MainWindow(QWidget *parent) :
         db->inserIntoTable(data);
     } */
 
-    /* Инициализируем модель для представления данных
-     * с заданием названий колонок
-     * */
-    this->setupModel(TABLE,
-                     QStringList() << trUtf8("Имя")
-                                   << trUtf8("ID")
-
-               );
-
-    /* Инициализируем внешний вид таблицы с данными
-     * */
-    this->createUI();
+     this->createUI(QStringList() << trUtf8("Номер чека")
+                                  << trUtf8("Наименование")
+                                  << trUtf8("Артикул")
+                                  << trUtf8("Автомобиль")
+                                  << trUtf8("CLIENTID")
+                                  << trUtf8("IDMODEL")
+                                  << trUtf8("Цена")
+                    );
+    this->showData();
 }
 
 MainWindow::~MainWindow()
@@ -48,38 +45,70 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-/* Метод для инициализации модеи представления данных
- * */
-void MainWindow::setupModel(const QString &tableName, const QStringList &headers)
+void MainWindow::createUI(const QStringList &headers)
 {
-    /* Производим инициализацию модели представления данных
-     * с установкой имени таблицы в базе данных, по которому
-     * будет производится обращение в таблице
-     * */
-    model = new QSqlTableModel(this);
-    model->setTable(tableName);
+ui->tableWidget->setColumnCount(7); // Указываем число колонок
+   ui->tableWidget->setShowGrid(true); // Включаем сетку
+   // Разрешаем выделение только одного элемента
+   ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+   // Разрешаем выделение построчно
+   ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+   // Устанавливаем заголовки колонок
+   ui->tableWidget->setHorizontalHeaderLabels(headers);
+   // Растягиваем последнюю колонку на всё доступное пространство
+   ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
+   // Скрываем колонку под номером 0
+   ui->tableWidget->hideColumn(4);
+   ui->tableWidget->hideColumn(5);
 
-    /* Устанавливаем названия колонок в таблице с сортировкой данных
-     * */
-    for(int i = 0, j = 0; i < model->columnCount(); i++, j++){
-        model->setHeaderData(i,Qt::Horizontal,headers[j]);
-    }
-    // Устанавливаем сортировку по возрастанию данных по нулевой колонке
-    model->setSort(0,Qt::AscendingOrder);
 }
-
-void MainWindow::createUI()
+void MainWindow::showData()
 {
-    ui->tableView->setModel(model);     // Устанавливаем модель на TableView
-    //ui->tableView->setColumnHidden(0, true);    // Скрываем колонку с id записей
-    // Разрешаем выделение строк
-    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    // Устанавливаем режим выделения лишь одно строки в таблице
-    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    // Устанавливаем размер колонок по содержимому
-    ui->tableView->resizeColumnsToContents();
-    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    // Создаём запрос для для выборки записей из базы данных
+    QSqlQuery query;
+    //query.setForwardOnly(true);
+    /* Выполняем заполнение QTableWidget записями с помощью цикла
+    * */
+    if (!query.exec("select * from GETALLPARTS"))
+     qDebug() << "SQL ERROR: " << query.lastError().text();
+    //unsigned recCount = query.record().count();
+    //qDebug() << query.numRowsAffected();
+    //int i=0;
+    while(query.next()){
+        int i = query.at();
+        //qDebug() << i;
+        ui->tableWidget->insertRow(i);
+        /* Устанавливаем в первую колонку id забирая его из результата SQL-запроса
+         * Эта колонка будет скрыта
+         * */
+        ui->tableWidget->setItem(i,0, new QTableWidgetItem(query.value(0).toString()));
 
-    model->select(); // Делаем выборку данных из таблицы
+        // Создаём элемент, который будет выполнять роль чекбокса
+        /*QTableWidgetItem *item = new QTableWidgetItem();
+        item->data(Qt::CheckStateRole); */
+        /* Проверяем, на статус нечетности, если нечетное устройство, то
+         * выставляем состояние чекбокса в Checked, иначе в Unchecked
+         * */
+        /*if(query.value(1).toInt() == 1){
+            item->setCheckState(Qt::Checked);
+        } else {
+            item->setCheckState(Qt::Unchecked);
+        } */
+        // Устанавливаем чекбокс во вторую колонку
+        //ui->tableWidget->setItem(i,1, item);
+        // Далее забираем все данные из результата запроса и устанавливаем в остальные поля
+        ui->tableWidget->setItem(i,1, new QTableWidgetItem(query.value(1).toString()));
+        ui->tableWidget->setItem(i,2, new QTableWidgetItem(query.value(2).toString()));
+        ui->tableWidget->setItem(i,3, new QTableWidgetItem(query.value(3).toString()));
+        ui->tableWidget->setItem(i,4, new QTableWidgetItem(query.value(4).toString()));
+        ui->tableWidget->setItem(i,5, new QTableWidgetItem(query.value(5).toString()));
+        ui->tableWidget->setItem(i,6, new QTableWidgetItem(query.value(4).toString()));
+        if (!query.isActive())
+        QMessageBox::warning(this, tr("Database Error"),
+                                query.lastError().text());
+    }
+
+
+    // Ресайзим колонки по содержимому
+    ui->tableWidget->resizeColumnsToContents();
 }

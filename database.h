@@ -4,20 +4,17 @@
 #include <QObject>
 #include <QSql>
 #include <QSqlQuery>
+#include <QSqlRecord>
 #include <QSqlError>
 #include <QSqlDatabase>
 #include <QFile>
 #include <QDate>
 #include <QDebug>
-
+#include <qsqldriverplugin.h>
 /* Директивы имен таблицы, полей таблицы и базы данных */
 #define DATABASE_HOSTNAME   "localhost"
-#define DATABASE_NAME       "AutoDlr.gdb"
+#define DATABASE_NAME       "curBase"
 #define TABLE               "DIRCARMARK"
-#define TABLE_DATE              "Date"
-#define TABLE_TIME              "Time"
-#define TABLE_MESSAGE           "Message"
-#define TABLE_RANDOM            "Random"
 
 class DataBase : public QObject
 {

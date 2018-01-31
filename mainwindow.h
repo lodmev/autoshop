@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSqlTableModel>
+#include <QMessageBox>
 /* Подключаем заголовочный файл для работы с информацией, которая помещена в базу данных */
 #include "database.h"
 
@@ -27,11 +28,8 @@ private:
     QSqlTableModel  *model;
 
 private:
-    /* Также присутствуют два метода, которые формируют модель
-     * и внешний вид TableView
-     * */
-    void setupModel(const QString &tableName, const QStringList &headers);
-    void createUI();
+    void createUI(const QStringList &headers);
+    void showData();
 };
 
 #endif // MAINWINDOW_H
