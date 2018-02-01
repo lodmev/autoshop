@@ -48,7 +48,7 @@ MainWindow::~MainWindow()
 void MainWindow::createUI(const QStringList &headers)
 {
 ui->tableWidget->setColumnCount(7); // Указываем число колонок
-   ui->tableWidget->setShowGrid(true); // Включаем сетку
+   //ui->tableWidget->setShowGrid(true); // Включаем сетку
    // Разрешаем выделение только одного элемента
    ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
    // Разрешаем выделение построчно
@@ -57,7 +57,7 @@ ui->tableWidget->setColumnCount(7); // Указываем число колон�
    ui->tableWidget->setHorizontalHeaderLabels(headers);
    // Растягиваем последнюю колонку на всё доступное пространство
    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
-   // Скрываем колонку под номером 0
+   // Скрываем колонки под номером 4 и 5
    ui->tableWidget->hideColumn(4);
    ui->tableWidget->hideColumn(5);
 
@@ -102,7 +102,7 @@ void MainWindow::showData()
         ui->tableWidget->setItem(i,3, new QTableWidgetItem(query.value(3).toString()));
         ui->tableWidget->setItem(i,4, new QTableWidgetItem(query.value(4).toString()));
         ui->tableWidget->setItem(i,5, new QTableWidgetItem(query.value(5).toString()));
-        ui->tableWidget->setItem(i,6, new QTableWidgetItem(query.value(4).toString()));
+        ui->tableWidget->setItem(i,6, new QTableWidgetItem(query.value(6).toString()));
         if (!query.isActive())
         QMessageBox::warning(this, tr("Database Error"),
                                 query.lastError().text());
