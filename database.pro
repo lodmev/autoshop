@@ -27,12 +27,12 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         database.cpp \
-    allparts.cpp
+    allpartsmodel.cpp
 
 HEADERS += \
         mainwindow.h \
         database.h \
-    allparts.h
+    allpartsmodel.h
 
 FORMS += \
     mainwindow.ui

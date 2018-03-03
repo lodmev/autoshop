@@ -2,7 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "allparts.h"
+#include <QTableView>
+#include "allpartsmodel.h"
 
 namespace Ui {
 class MainWindow;
@@ -16,13 +17,13 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 signals:
-ready(QTableWidget *);
+ready();
 public slots:
 void allPartsReady() ;
 private:
     Ui::MainWindow  *ui;
-    QTableWidget *tbl;
-
+    QTableView *m_view;
+    AllPartsModel *apm;
 };
 
 #endif // MAINWINDOW_H
