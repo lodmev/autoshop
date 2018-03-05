@@ -3,7 +3,6 @@
 AllPartsModel::AllPartsModel( QObject* parent ) : QAbstractTableModel( parent ) {
     db = new DataBase();
     db->connectToDataBase();
-    //this->updateData();
 }
 
 int AllPartsModel::rowCount( const QModelIndex& parent ) const {
@@ -77,7 +76,7 @@ void AllPartsModel::appendPart( const uint num, const QString& name,
     m_parts.append( p_data );
     endInsertRows();
 }
-void AllPartsModel::updateData(){
+void AllPartsModel::makeQuery(){
     qDebug() << "updating...";
     QSqlQuery query;
     if (!query.exec("select * from GETALLPARTS"))
@@ -88,4 +87,6 @@ void AllPartsModel::updateData(){
     }
     emit ready();
 }
-
+void AllPartsModel::updateData(){
+    QtConcurrent::run(this,&AllPartsModel::makeQuery);
+}

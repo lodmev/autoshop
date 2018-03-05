@@ -5,6 +5,7 @@
 #include <QAbstractTableModel>
 #include <QString>
 #include <QHash>
+#include <QtConcurrent>
 #include "database.h"
 class AllPartsModel : public QAbstractTableModel
 {
@@ -37,6 +38,7 @@ void updateData();
 signals:
 ready();
 private:
+    void makeQuery();
     typedef QHash< Column, QVariant > PartData;
     typedef QList< PartData > Parts;
     Parts m_parts;

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTableView>
+#include <QSortFilterProxyModel>
 #include "allpartsmodel.h"
 
 namespace Ui {
@@ -24,6 +25,7 @@ private:
     Ui::MainWindow  *ui;
     QTableView *m_view;
     AllPartsModel *apm;
+    QSortFilterProxyModel *proxyModel;
 };
 
 #endif // MAINWINDOW_H
