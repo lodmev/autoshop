@@ -34,6 +34,5 @@ HEADERS += \
         database.h \
     allpartsmodel.h
 
-FORMS += \
-    mainwindow.ui
+FORMS +=
 

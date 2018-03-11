@@ -4,13 +4,13 @@
 #include <QDebug>
 int main(int argc, char *argv[])
 {
-    QStringList paths = QCoreApplication::libraryPaths();
-        paths.append("./plugins/platforms");
-        paths.append("./plugins/sqldrivers");
-        QCoreApplication::setLibraryPaths(paths);
+   // QStringList paths = QCoreApplication::libraryPaths();
+       // paths.append("./plugins/platforms");
+       // paths.append("./plugins/sqldrivers");
+        //QCoreApplication::setLibraryPaths(paths);
     try {
     QApplication a(argc, argv);
-    qDebug() << a.libraryPaths();
+    //qDebug() << a.libraryPaths();
     MainWindow w;
     w.show();
     return a.exec();
