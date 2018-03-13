@@ -26,7 +26,7 @@ void allPartsReady() ;
 void resizeInputFields(int,int,int) ;
 private:
     QVBoxLayout *mainLayout ;
-    QGridLayout *upLayout ;
+    QHBoxLayout *upLayout ;
     QTableView *m_view;
     QHeaderView *m_viewHHeader;
     AllPartsModel *apm;
@@ -34,6 +34,7 @@ private:
     QPushButton *clearAll;
     QLineEdit *numSearch, *nameSearch, *artSearch, *carSearch;
     void setTableAttribute();
+    void setConnections();
 };
 
 #endif // MAINWINDOW_H

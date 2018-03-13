@@ -88,5 +88,6 @@ void AllPartsModel::makeQuery(){
     emit ready();
 }
 void AllPartsModel::updateData(){
+   // makeQuery();
     QtConcurrent::run(this,&AllPartsModel::makeQuery);
 }

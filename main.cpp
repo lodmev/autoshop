@@ -4,6 +4,7 @@
 #include <QDebug>
 int main(int argc, char *argv[])
 {
+    //qputenv("QT_DEBUG_PLUGINS", QByteArray("1"));
    // QStringList paths = QCoreApplication::libraryPaths();
        // paths.append("./plugins/platforms");
        // paths.append("./plugins/sqldrivers");
