@@ -1,8 +1,7 @@
 #include "allpartsmodel.h"
 
 AllPartsModel::AllPartsModel( QObject* parent ) : QAbstractTableModel( parent ) {
-    db = new DataBase();
-    db->connectToDataBase();
+
 }
 
 int AllPartsModel::rowCount( const QModelIndex& parent ) const {
@@ -86,8 +85,10 @@ void AllPartsModel::makeQuery(){
                          query.value(CAR).toString(),query.value(CLIENTID).toString(),query.value(IDMODEL).toString(),query.value(PRICE).toString() );
     }
     emit ready();
+    emit readyModel(this);
 }
 void AllPartsModel::updateData(){
-   // makeQuery();
+   //makeQuery();
     QtConcurrent::run(this,&AllPartsModel::makeQuery);
 }
+

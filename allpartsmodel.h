@@ -6,6 +6,7 @@
 #include <QString>
 #include <QHash>
 #include <QtConcurrent>
+//#include <QFuture>
 #include "database.h"
 class AllPartsModel : public QAbstractTableModel
 {
@@ -37,12 +38,12 @@ public slots:
 void updateData();
 signals:
 ready();
+readyModel(AllPartsModel *);
 private:
     void makeQuery();
     typedef QHash< Column, QVariant > PartData;
     typedef QList< PartData > Parts;
     Parts m_parts;
-    DataBase *db;
 };
 
 #endif // ALLPARTSMODEL_H

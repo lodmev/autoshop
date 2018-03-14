@@ -21,9 +21,12 @@ public:
     ~MainWindow();
 signals:
 ready();
+setDataToModel();
 public slots:
 void allPartsReady() ;
+void makeNewAPModel() ;
 void resizeInputFields(int,int,int) ;
+void updateSourceModel(AllPartsModel *);
 private:
     QVBoxLayout *mainLayout ;
     QHBoxLayout *upLayout ;
@@ -31,7 +34,8 @@ private:
     QHeaderView *m_viewHHeader;
     AllPartsModel *apm;
     QSortFilterProxyModel *proxyModel;
-    QPushButton *clearAll;
+    DataBase *db;
+    QPushButton *clearAllButton, *updateButton;
     QLineEdit *numSearch, *nameSearch, *artSearch, *carSearch;
     void setTableAttribute();
     void setConnections();
