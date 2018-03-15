@@ -10,14 +10,16 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("Поиск по базе");
     mainLayout = new QVBoxLayout();
     centralWidget->setLayout(mainLayout);
-    apm = new AllPartsModel();
+    apmOne = new AllPartsModel();
+    apmTwo = new AllPartsModel();
     proxyModel = new QSortFilterProxyModel();
     m_view = new QTableView;
     m_viewHHeader = m_view->horizontalHeader() ;
     updateButton  = new QPushButton("Обновить данные");
-    //m_view->setModel(apm);
-   // proxyModel->setSourceModel(apm);
-    //QtConcurrent::run(proxyModel,&QSortFilterProxyModel::setSourceModel,apm);
+    m_view->setModel(proxyModel);
+    //m_view->setModel(apmOne);
+   // proxyModel->setSourceModel(apmOne);
+    //QtConcurrent::run(proxyModel,&QSortFilterProxyModel::setSourceModel,apmOne);
     upLayout = new QHBoxLayout();
     upLayout->addWidget(numSearch  = new QLineEdit());//,0,0,Qt::AlignCenter );
     upLayout->addWidget(nameSearch = new QLineEdit());//,0,1,Qt::AlignCenter );
@@ -39,13 +41,13 @@ MainWindow::MainWindow(QWidget *parent) :
     //this->setTableAttribute() ;
     this->setMinimumWidth(750);
     this->resize(900,600);
-    emit ready();
+    //emit ready();
+    changeSourceModel();
 }
 void MainWindow::allPartsReady()
 {
-    proxyModel->setSourceModel(apm);
+   // proxyModel->setSourceModel(apmOne);
     qDebug() << "update succes!";
-    m_view->setModel(proxyModel);
     m_view->setSortingEnabled(true);
     proxyModel->sort(AllPartsModel::NUM,Qt::DescendingOrder);
     this->setTableAttribute() ;
@@ -71,26 +73,39 @@ void MainWindow::resizeInputFields(int logIndex, int , int newSize) {
     }
 }
 void MainWindow::setTableAttribute(){
+    m_viewHHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
     m_viewHHeader->setSectionResizeMode(AllPartsModel::NAME,QHeaderView::Stretch );
     m_viewHHeader->setSectionHidden(AllPartsModel::CLIENTID,true);
     m_viewHHeader->setSectionHidden(AllPartsModel::IDMODEL,true);
-    m_view->resizeColumnsToContents();
+    //m_view->resizeColumnsToContents();
 }
 void MainWindow::setConnections(){
-    connect(updateButton,&QPushButton::clicked,this,&MainWindow::makeNewAPModel);
-    connect(this,&MainWindow::ready,apm,&AllPartsModel::updateData);
-    connect(apm,&AllPartsModel::ready,this,&MainWindow::allPartsReady);
+    connect(updateButton,&QPushButton::clicked,this,&MainWindow::changeSourceModel);
     connect(m_viewHHeader,&QHeaderView::sectionResized,this,&MainWindow::resizeInputFields);
+    connect(this,&MainWindow::setDataToModel,apmOne,&AllPartsModel::updateData);
+    connect(apmOne,&AllPartsModel::readyModel,this,&MainWindow::setSourceModel);
+    connect(apmTwo,&AllPartsModel::readyModel,this,&MainWindow::setSourceModel);
 }
-void MainWindow::makeNewAPModel(){
-    AllPartsModel *alpamo = new AllPartsModel();
-    connect(alpamo,&AllPartsModel::readyModel,this,&MainWindow::updateSourceModel);
-    connect(this,&MainWindow::setDataToModel,alpamo,&AllPartsModel::updateData);
-    emit setDataToModel();
+void MainWindow::changeSourceModel(){
+    if (proxyModel->sourceModel() == apmOne){
+        apmTwo->updateData();
+        qDebug() << "current source is apmOne";
+    }
+    else if (proxyModel->sourceModel() == apmTwo){
+        apmOne->updateData();
+        qDebug() << "current source is apmTwo";
+    }
+    else {
+        apmOne->updateData();
+        qDebug() << "current source is х.з.";
+    }
 }
-void MainWindow::updateSourceModel(AllPartsModel * allPartsM){
-    proxyModel->setSourceModel(allPartsM);
+void MainWindow::setSourceModel(AllPartsModel * newApm){
+    //newApm = new AllPartsModel();
+    proxyModel->setSourceModel(newApm);
+    allPartsReady();
     qDebug() << "обновили source model" ;
+
 }
 MainWindow::~MainWindow()
 {

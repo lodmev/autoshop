@@ -13,6 +13,7 @@ class AllPartsModel : public QAbstractTableModel
     Q_OBJECT
 public:
     AllPartsModel(QObject* parent = 0 );
+    ~AllPartsModel();
     int rowCount( const QModelIndex& parent ) const;
     int columnCount( const QModelIndex& parent ) const;
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
