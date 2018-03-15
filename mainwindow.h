@@ -24,15 +24,15 @@ ready();
 setDataToModel();
 public slots:
 void allPartsReady() ;
-void makeNewAPModel() ;
+void changeSourceModel() ;
 void resizeInputFields(int,int,int) ;
-void updateSourceModel(AllPartsModel *);
+void setSourceModel(AllPartsModel *);
 private:
     QVBoxLayout *mainLayout ;
     QHBoxLayout *upLayout ;
     QTableView *m_view;
     QHeaderView *m_viewHHeader;
-    AllPartsModel *apm;
+    AllPartsModel *apmOne, *apmTwo;
     QSortFilterProxyModel *proxyModel;
     DataBase *db;
     QPushButton *clearAllButton, *updateButton;

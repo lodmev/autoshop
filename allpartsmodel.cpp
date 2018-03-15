@@ -89,6 +89,10 @@ void AllPartsModel::makeQuery(){
 }
 void AllPartsModel::updateData(){
    //makeQuery();
+ // QFuture<void> future =
     QtConcurrent::run(this,&AllPartsModel::makeQuery);
+  //future.waitForFinished();
 }
-
+AllPartsModel::~AllPartsModel(){
+    qDebug() << "destroy apm";
+}
