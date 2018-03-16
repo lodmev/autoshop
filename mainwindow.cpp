@@ -77,7 +77,6 @@ void MainWindow::setTableAttribute(){
     m_viewHHeader->setSectionResizeMode(AllPartsModel::NAME,QHeaderView::Stretch );
     m_viewHHeader->setSectionHidden(AllPartsModel::CLIENTID,true);
     m_viewHHeader->setSectionHidden(AllPartsModel::IDMODEL,true);
-    //m_view->resizeColumnsToContents();
 }
 void MainWindow::setConnections(){
     connect(updateButton,&QPushButton::clicked,this,&MainWindow::changeSourceModel);
